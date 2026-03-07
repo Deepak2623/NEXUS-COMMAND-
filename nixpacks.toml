@@ -9,7 +9,7 @@ cmds = [
 
 [phases.build]
 cmds = [
-    "if [ -d \"frontend\" ]; then cd frontend && npm run build; fi"
+    "cd frontend && npm run build"
 ]
 
 [start]

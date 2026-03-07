@@ -31,13 +31,39 @@ master_app.mount("/api", nexus_app)
 
 # 2. Serve built frontend files at /
 # (Fallback: serve index.html for all non-API the SPA/Next.js router)
-frontend_dist = os.path.join(os.path.dirname(__file__), "frontend/out")
+def find_frontend_dist():
+    """Identify the exact location of the built frontend files."""
+    paths = [
+        os.path.join(os.path.dirname(__file__), "frontend/out"),
+        os.path.join(os.path.dirname(__file__), "out"),
+        "/app/frontend/out",
+        "/app/out"
+    ]
+    for p in paths:
+        if os.path.isdir(p) and os.path.isfile(os.path.join(p, "index.html")):
+            print(f"📦 Found frontend dist at: {p}")
+            return p
+    return None
+
+frontend_dist = find_frontend_dist()
 
 @master_app.get("/{full_path:path}")
 async def serve_frontend(full_path: str):
-    # Skip if it's an API route (FastAPI mounting usually handles this automatically, but let's be safe)
+    # Skip if it's an API route 
     if full_path.startswith("api"):
-        return None # Let the mount handle it
+        return None 
+
+    if not frontend_dist:
+        available = []
+        try:
+            available = os.listdir(os.path.dirname(__file__))
+        except: pass
+        return {
+            "error": "Frontend build files not found.",
+            "debug_root": os.path.dirname(__file__),
+            "debug_files": available,
+            "instruction": "Ensure 'npm run build' ran successfully and generated 'frontend/out/index.html'."
+        }
 
     # Check if the requested file exists
     file_path = os.path.join(frontend_dist, full_path)
@@ -49,7 +75,7 @@ async def serve_frontend(full_path: str):
     if os.path.isfile(index_path):
         return FileResponse(index_path)
     
-    return {"error": "Frontend build files not found. Run 'npm run build' first."}
+    return {"error": f"Path '{full_path}' not found in frontend distribution."}
 
 if __name__ == "__main__":
     import uvicorn
