@@ -34,17 +34,19 @@ master_app.mount("/api", nexus_app)
 def find_frontend_dist():
     """Identify the exact location of the built frontend files."""
     paths = [
-        os.path.join(os.path.dirname(__file__), "frontend_dist"),
+        os.path.join(os.getcwd(), "frontend/out"),
         os.path.join(os.path.dirname(__file__), "frontend/out"),
-        os.path.join(os.path.dirname(__file__), "out"),
-        "/app/frontend_dist",
+        os.path.join(os.getcwd(), "frontend_dist"),
         "/app/frontend/out",
-        "/app/out"
+        "/app/frontend_dist",
+        os.path.join(os.getcwd(), "out")
     ]
     for p in paths:
-        if os.path.isdir(p) and os.path.isfile(os.path.join(p, "index.html")):
-            print(f"📦 Found frontend dist at: {p}")
-            return p
+        if os.path.isdir(p):
+            # Check for index.html or any file
+            if os.path.exists(os.path.join(p, "index.html")):
+                print(f"📦 Found frontend dist at: {p}")
+                return p
     return None
 
 frontend_dist = find_frontend_dist()
@@ -57,14 +59,18 @@ async def serve_frontend(full_path: str):
 
     if not frontend_dist:
         available = []
+        frontend_contents = []
         try:
-            available = os.listdir(os.path.dirname(__file__))
+            available = os.listdir(os.getcwd())
+            if "frontend" in available:
+                frontend_contents = os.listdir(os.path.join(os.getcwd(), "frontend"))
         except: pass
         return {
             "error": "Frontend build files not found.",
-            "debug_root": os.path.dirname(__file__),
-            "debug_files": available,
-            "instruction": "Ensure 'npm run build' ran successfully and generated 'frontend/out/index.html'."
+            "cwd": os.getcwd(),
+            "root_files": available,
+            "frontend_folder_files": frontend_contents,
+            "instruction": "Ensure 'npm run build' generates 'out' folder."
         }
 
     # Check if the requested file exists

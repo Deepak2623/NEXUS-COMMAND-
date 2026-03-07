@@ -10,8 +10,8 @@ __pycache__/
 !.env.example
 
 # Next.js
-.next/
-out/
+# .next/
+# out/
 
 # Python
 *.py[oc]

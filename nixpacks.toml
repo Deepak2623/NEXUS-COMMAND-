@@ -9,8 +9,10 @@ cmds = [
 
 [phases.build]
 cmds = [
+    "echo '🚀 Building Frontend...'",
     "cd frontend && npm run build",
-    "mkdir -p frontend_dist && (cp -r frontend/out/* frontend_dist/ || cp -r out/* frontend_dist/ || true)"
+    "echo '✅ Frontend Build Complete. Found out/: $(ls -d frontend/out 2>/dev/null || echo \"NOT FOUND\")'",
+    "ls -R frontend/out | head -n 10" 
 ]
 
 [start]
