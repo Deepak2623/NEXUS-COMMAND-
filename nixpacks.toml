@@ -1,0 +1,16 @@
+[phases.setup]
+nixPkgs = ["python312", "nodejs"]
+
+[phases.install]
+cmds = [
+    "if [ -d \"backend\" ]; then pip install -r backend/requirements.txt; fi",
+    "if [ -d \"frontend\" ]; then cd frontend && npm install; fi"
+]
+
+[phases.build]
+cmds = [
+    "if [ -d \"frontend\" ]; then cd frontend && npm run build; fi"
+]
+
+[start]
+cmd = "if [ -f \"backend/main.py\" ]; then cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT; else cd frontend && npm start; fi"

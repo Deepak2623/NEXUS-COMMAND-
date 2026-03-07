@@ -18,18 +18,20 @@ To deploy both services on Railway, follow these steps:
 ### 2. Setup Backend Service
 
 - In your Railway project, click **New** -> **GitHub Repo** -> `NEXUS-COMMAND-`.
-- Go to the **Settings** tab of this new service.
+- **CRITICAL STEP**: Go to the **Settings** tab of this new service.
+- Scroll down to **General** -> **Root Directory**.
 - Set **Root Directory** to `/backend`.
-- Set **Custom Build Command** to `pip install .` or let Nixpacks handle it.
-- Set **Start Command** to `python main.py` or `uvicorn main:app --host 0.0.0.0 --port $PORT`.
+- Railway will now correctly see `requirements.txt` and `main.py`.
+- Set **Start Command** to `bash start.sh` (or let Railway auto-detect it).
 - Add all environment variables from your `backend/.env` to the **Variables** tab.
 
 ### 3. Setup Frontend Service
 
 - Click **New** -> **GitHub Repo** -> `NEXUS-COMMAND-` again (creating a second service from the same repo).
-- Go to the **Settings** tab.
+- **CRITICAL STEP**: Go to the **Settings** tab.
+- Scroll down to **General** -> \*\*Root Directory`.
 - Set **Root Directory** to `/frontend`.
-- Railway will automatically detect Next.js.
+- Railway will automatically detect Next.js and build it.
 - Add environment variables:
   - `NEXT_PUBLIC_API_URL`: The URL of your Railway Backend service.
   - `NEXT_PUBLIC_LANGFUSE_PROJECT_ID`: (If used)
