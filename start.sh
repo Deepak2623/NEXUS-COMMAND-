@@ -15,4 +15,3 @@ fi
 # Run the master server which handles both backend and frontend
 echo "🚀 Starting Master Server..."
 $PYTHON_CMD server.py
-

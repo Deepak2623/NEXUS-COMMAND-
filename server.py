@@ -31,59 +31,37 @@ master_app.mount("/api", nexus_app)
 
 # 2. Serve built frontend files at /
 # (Fallback: serve index.html for all non-API the SPA/Next.js router)
-def find_frontend_dist():
-    """Identify the exact location of the built frontend files."""
-    paths = [
-        os.path.join(os.getcwd(), "frontend/out"),
-        os.path.join(os.path.dirname(__file__), "frontend/out"),
-        os.path.join(os.getcwd(), "frontend_dist"),
-        "/app/frontend/out",
-        "/app/frontend_dist",
-        os.path.join(os.getcwd(), "out")
-    ]
-    for p in paths:
-        if os.path.isdir(p):
-            # Check for index.html or any file
-            if os.path.exists(os.path.join(p, "index.html")):
-                print(f"📦 Found frontend dist at: {p}")
-                return p
-    return None
+# 2. Serve built frontend files at /
+# (Fallback: serve index.html for all non-API routes)
+FRONTEND_PATH = os.path.join(os.path.dirname(__file__), "frontend", "out")
 
-frontend_dist = find_frontend_dist()
+# Ensure the folder exists to avoid FastAPI mount error
+if not os.path.isdir(FRONTEND_PATH):
+    print(f"⚠️ WARNING: Frontend build folder not found at: {FRONTEND_PATH}")
+    # Creating a dummy path for development if necessary, or just log
+else:
+    print(f"📦 Serving frontend from: {FRONTEND_PATH}")
 
 @master_app.get("/{full_path:path}")
-async def serve_frontend(full_path: str):
-    # Skip if it's an API route 
+async def serve_spa_frontend(full_path: str):
+    # Skip if it is an API route (unlikely to reach here if /api is mounted above)
     if full_path.startswith("api"):
-        return None 
-
-    if not frontend_dist:
-        available = []
-        frontend_contents = []
-        try:
-            available = os.listdir(os.getcwd())
-            if "frontend" in available:
-                frontend_contents = os.listdir(os.path.join(os.getcwd(), "frontend"))
-        except: pass
-        return {
-            "error": "Frontend build files not found.",
-            "cwd": os.getcwd(),
-            "root_files": available,
-            "frontend_folder_files": frontend_contents,
-            "instruction": "Ensure 'npm run build' generates 'out' folder."
-        }
-
-    # Check if the requested file exists
-    file_path = os.path.join(frontend_dist, full_path)
+        return None
+        
+    # Determine the file location
+    file_path = os.path.join(FRONTEND_PATH, full_path)
+    
+    # If the file exists (like .js or .css), serve it
     if os.path.isfile(file_path):
         return FileResponse(file_path)
-    
-    # Fallback to index.html for CSR
-    index_path = os.path.join(frontend_dist, "index.html")
+        
+    # Otherwise, fallback to index.html for React/Next.js client-side routing
+    index_path = os.path.join(FRONTEND_PATH, "index.html")
     if os.path.isfile(index_path):
         return FileResponse(index_path)
     
-    return {"error": f"Path '{full_path}' not found in frontend distribution."}
+    # Last resort fallback if build is completely missing
+    return {"error": "Frontend build files missing. Run 'npm run build' first."}
 
 if __name__ == "__main__":
     import uvicorn

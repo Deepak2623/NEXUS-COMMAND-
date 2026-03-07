@@ -10,9 +10,7 @@ cmds = [
 [phases.build]
 cmds = [
     "echo '🚀 Building Frontend...'",
-    "cd frontend && npm run build",
-    "echo '✅ Frontend Build Complete. Found out/: $(ls -d frontend/out 2>/dev/null || echo \"NOT FOUND\")'",
-    "ls -R frontend/out | head -n 10" 
+    "cd frontend && npm run build"
 ]
 
 [start]
