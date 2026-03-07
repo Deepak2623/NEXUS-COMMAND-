@@ -26,7 +26,7 @@ The system uses a **Supervisor** model built on **LangGraph**. When a command is
 ```mermaid
 graph TD
     User([🧑 User  ⌘K]) --> CB[📟 Command Bar]
-    CB --> SSE[/task/stream SSE]
+    CB --> SSE["/task/stream SSE"]
     SSE --> Router{🧭 Groq Router\nLlama 3.3 70B}
 
     Router -- Research --> RA[🔬 Research Agent\nTavily + Gemini]
