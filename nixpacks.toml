@@ -14,4 +14,3 @@ cmds = [
 
 [start]
 cmd = "bash start.sh"
-# Set SERVICE_TYPE="backend" or "frontend" in Railway environment variables
