@@ -1,15 +1,16 @@
 [phases.setup]
-nixPkgs = ["python312", "nodejs", "libgomp"]
+nixPkgs = ["python312", "nodejs_20", "libgomp"]
 
 [phases.install]
 cmds = [
     "pip install -r requirements.txt",
-    "if [ -d \"frontend\" ]; then cd frontend && npm install; fi"
+    "cd frontend && npm install --production=false"
 ]
 
 [phases.build]
 cmds = [
-    "cd frontend && npm run build"
+    "cd frontend && npm run build",
+    "mv frontend/out/ ./frontend_dist/ || echo 'Move failed, trying alternate' && mv out ./frontend_dist/ || true"
 ]
 
 [start]

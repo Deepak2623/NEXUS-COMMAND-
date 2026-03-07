@@ -34,8 +34,10 @@ master_app.mount("/api", nexus_app)
 def find_frontend_dist():
     """Identify the exact location of the built frontend files."""
     paths = [
+        os.path.join(os.path.dirname(__file__), "frontend_dist"),
         os.path.join(os.path.dirname(__file__), "frontend/out"),
         os.path.join(os.path.dirname(__file__), "out"),
+        "/app/frontend_dist",
         "/app/frontend/out",
         "/app/out"
     ]
