@@ -71,14 +71,13 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # ─── VERSION ───────────────────────────────────────────────────────────────
 APP_VERSION = "4.5.3"
 
-# CORS — locks to Next.js dev server; override via ALLOWED_ORIGIN env var in prod
-ALLOWED_ORIGIN = os.getenv("ALLOWED_ORIGIN", "http://localhost:3000")
+# CORS — Permit all for initial production launch to ensure connectivity
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[ALLOWED_ORIGIN, "http://localhost:3000"],
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET", "POST"],
-    allow_headers=["Content-Type", "Authorization", "X-Request-ID", "Cache-Control"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # ── Mount aggregation router (replaces waterfall API calls) ──────────────────

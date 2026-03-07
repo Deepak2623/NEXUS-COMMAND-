@@ -1,3 +1,3 @@
 #!/bin/bash
-export PORT=${PORT:-8000}
-uvicorn main:app --host 0.0.0.0 --port $PORT
+echo "Starting Backend API..."
+python -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
