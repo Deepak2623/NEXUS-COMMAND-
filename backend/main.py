@@ -89,6 +89,16 @@ from app.core.billing_middleware import BillingMiddleware
 app.add_middleware(BillingMiddleware)
 
 
+@app.get("/")
+async def root():
+    return {
+        "nexus": "Command Center API",
+        "version": APP_VERSION,
+        "status": "online",
+        "docs": "/docs"
+    }
+
+
 # ─────────────────────────────────────────────────────────
 # LAZY SUPERVISOR IMPORT  (fast startup)
 # ─────────────────────────────────────────────────────────
