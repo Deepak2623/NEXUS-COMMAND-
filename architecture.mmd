@@ -1,0 +1,35 @@
+graph TD
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:2px;
+    classDef router fill:#ffb347,stroke:#ff8c00,stroke-width:2px,color:#000;
+    classDef agent fill:#87ceeb,stroke:#4682b4,stroke-width:2px,color:#000;
+    classDef guardian fill:#ff69b4,stroke:#c71585,stroke-width:2px,color:#fff;
+    classDef db fill:#98fb98,stroke:#2e8b57,stroke-width:2px,color:#000;
+    classDef ui fill:#dda0dd,stroke:#8b008b,stroke-width:2px,color:#000;
+
+    User(["🧑 User  ⌘K"]) --> CB["📟 Command Bar"]
+    CB --> SSE["/task/stream SSE"]
+    SSE --> Router{"🧭 Groq Router\nLlama 3.3 70B"}
+
+    Router -- Research --> RA[🔬 Research Agent\nTavily + Gemini]
+    Router -- Code/Security --> CR[🛡️ CodeReview Agent\nGemini 2.0 Flash]
+    Router -- Knowledge --> KA[📚 Knowledge Agent\nFAISS RAG]
+    Router -- Diagnostics --> NN[🧠 Nexus-Node\nGemini 2.0 Flash]
+    Router -- Slack --> SA[📡 Slack Agent\nSocket Mode]
+
+    class Router router;
+    class RA,CR,KA,NN,SA agent;
+
+    RA --> GN["🔒 Guardian Node\nPII Scrub + SHA-256"]
+    CR --> GN
+    KA --> GN
+    NN --> GN
+    SA --> GN
+
+    GN --> EF["⚡ Edge Function\ngovernance-ingest"]
+    EF --> SB[("🗄️ Supabase PRIMARY")]
+    SB --> RT["📡 Realtime WebSocket"]
+    RT --> UI[["💻 Nexus Dashboard"]]
+
+    class GN guardian;
+    class SB db;
+    class UI ui;

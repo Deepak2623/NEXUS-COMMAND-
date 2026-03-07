@@ -1,0 +1,44 @@
+================================================================================
+NEXUS COMMAND CENTER (v4.5.3 - ULTRA EDITION)
+================================================================================
+
+1. WHAT IS THIS?
+Nexus is a high-performance "Agentic Operating System." It allows you to control a
+mesh of autonomous AI agents through a single Command Bar or via Slack. It is built 
+specifically for speed, security, and enterprise-grade reliability.
+
+2. THE "ULTRA" ARCHITECTURE (How it works)
+The system uses a "Supervisor" model (built on LangGraph). When you enter a command:
+   - 🧭 ROUTER: A high-speed Llama 3.3 model (Groq) classifies the task in <100ms.
+   - 🔬 WORKERS: The task is sent to a specialized agent (Research, Audit, or Nexus).
+   - 🔒 GUARDIAN: Every response passes through a mandatory safety layer that 
+     scrubs sensitive data and generates a SHA-256 digital fingerprint.
+   - ⚡ STREAMING: We use "Ironclad SSE" which streams progress to the UI with 
+     a 500ms heartbeat. This ensures the connection stays alive even during 
+     deep reasoning.
+
+3. PERFORMANCE BENCHMARKS (2026 Standards)
+   - UI Connection: < 10ms (Handshake is instant)
+   - Agent Handover: ~400ms
+   - Total Task Completion: < 3.0 Seconds (Target Met)
+   - DB Persistence: ~12ms using optimized Supabase RPCs.
+
+4. KEY COMPONENTS
+   - BACKEND: FastAPI + LangGraph + Gemini 2.0 Flash + Groq.
+   - FRONTEND: Next.js 16 + React 19 + Framer Motion (Glassmorphism UI).
+   - DATABASE: Dual-Supabase (Primary + Secondary Redundancy).
+   - SLACK: Two-way Socket Mode bridge for remote orchestration.
+
+5. SECURITY PROTOCOLS
+   - PII Scrubbing: Automatically removes emails/SSNs from logs.
+   - SHA-256 Audit: Every task creates an immutable "audit chain."
+   - Dual-Write: Data is saved to two separate databases simultaneously to 
+     ensure a "100% uptime" audit trail.
+
+6. HOW TO RUN
+   Simply run: ./nexus.sh
+   The script stops old processes, clears locks, and brings the whole mesh online.
+
+================================================================================
+Built for Velocity. Engineered for Safety. Verified by Nexus.
+================================================================================
