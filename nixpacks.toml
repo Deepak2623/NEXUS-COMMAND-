@@ -10,7 +10,7 @@ cmds = [
 [phases.build]
 cmds = [
     "cd frontend && npm run build",
-    "mv frontend/out/ ./frontend_dist/ || echo 'Move failed, trying alternate' && mv out ./frontend_dist/ || true"
+    "mkdir -p frontend_dist && (cp -r frontend/out/* frontend_dist/ || cp -r out/* frontend_dist/ || true)"
 ]
 
 [start]
