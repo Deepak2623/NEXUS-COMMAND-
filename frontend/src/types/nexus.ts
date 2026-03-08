@@ -2,7 +2,7 @@
 // src/types/nexus.ts — Shared types, constants, and config
 // ─────────────────────────────────────────────────────────────────────────────
 
-export const API = "http://localhost:8000";
+export const API = process.env.NEXT_PUBLIC_API_URL ?? "/api";
 export const VERSION = "4.5.1";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
