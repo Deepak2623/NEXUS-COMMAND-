@@ -12,6 +12,7 @@ import { MeshCard, MeshCardSkeleton } from "../components/MeshCard";
 import { CommandBar } from "../components/CommandBar";
 import { useNexusDashboard } from "../hooks/useNexusDashboard";
 import { MeshGraph } from "../components/MeshGraph";
+import { Mermaid } from "../components/Mermaid";
 
 // ── Code-split heavy components (lazy-loaded post-paint) ─────────────────────
 const VirtualGovernanceTable = lazy(() =>
@@ -262,13 +263,28 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Response body */}
-                <div
-                  className="response-body"
-                  dangerouslySetInnerHTML={{
-                    __html: formatResponse(response.response),
-                  }}
-                />
+                {/* Response body (Rich rendering with Mermaid support) */}
+                <div className="response-body">
+                  {response.response
+                    .split(/(```mermaid[\s\S]*?```)/)
+                    .map((chunk, i) => {
+                      if (chunk.startsWith("```mermaid")) {
+                        const chart = chunk
+                          .replace("```mermaid", "")
+                          .replace("```", "")
+                          .trim();
+                        return <Mermaid key={i} chart={chart} />;
+                      }
+                      return (
+                        <div
+                          key={i}
+                          dangerouslySetInnerHTML={{
+                            __html: formatResponse(chunk),
+                          }}
+                        />
+                      );
+                    })}
+                </div>
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 md:px-6 md:py-3 border-t border-[#10b981]/8 gap-4">
                   <div className="flex items-center gap-2 overflow-hidden">

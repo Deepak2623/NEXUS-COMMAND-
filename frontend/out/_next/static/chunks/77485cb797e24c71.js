@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,17869,e=>{"use strict";var a=e.i(27579);e.i(17337),e.s([],94667),e.i(94667),e.s(["RadarModule",()=>a.RadarModule,"createRadarServices",()=>a.createRadarServices],17869)}]);

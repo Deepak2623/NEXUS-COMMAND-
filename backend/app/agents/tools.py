@@ -112,7 +112,7 @@ async def run_codereview_task(query: str) -> str:
             Orchestration: Gemini 2.0 Flash Routing with Groq Fallback.
             """
             
-        system_prompt = f"You are the Parallel Security Judge. Audit the repository based on this context:\n{context}\n\nDo not hallucinate technologies (like Django or jQuery) if they are not in the context."
+        system_prompt = f"You are the Parallel Security Judge. Audit the repository based on this context:\n{context}\n\nDo not hallucinate technologies (like Django or jQuery) if they are not in the context. If you find architectural insights, use Mermaid diagrams (syntax: ```mermaid ... ```) to visualize them."
         # Prefer Groq for structured audit (fast)
         return await _fast_invoke(system_prompt, query, prefer_groq=True)
     except Exception as e:
@@ -143,7 +143,8 @@ async def run_nexus_task(query: str) -> str:
     - Resources: {psutil.cpu_percent()}% CPU / {psutil.virtual_memory().percent}% RAM
     """
     # Prefer Groq for system status formatting (fast)
-    return await _fast_invoke(f"Mission Controller. State: {diag_context}", query, prefer_groq=True)
+    system_prompt = f"Mission Controller. State: {diag_context}. You can use Mermaid diagrams (syntax: ```mermaid ... ```) to visualize system health or diagnostics."
+    return await _fast_invoke(system_prompt, query, prefer_groq=True)
 
 
 # ─── 📡 SLACK AGENT (Real Communicator) ──────────────────────────────────────
